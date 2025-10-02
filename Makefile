@@ -4,27 +4,23 @@ SRC_DIR = src
 TEST_DIR = tests
 BUILD_DIR = build
 
-# Cibles principales
 all: $(BUILD_DIR) tri_bulles
 
-# Créer le dossier build
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
-# Compiler le programme principal
+# Compiler le programme principal avec main.c
 tri_bulles: $(BUILD_DIR)
-	$(CC) $(CFLAGS) $(SRC_DIR)/tri_bulles.c -o $(BUILD_DIR)/tri_bulles
+	$(CC) $(CFLAGS) $(SRC_DIR)/tri_bulles.c $(SRC_DIR)/main.c -o $(BUILD_DIR)/tri_bulles
 
-# Compiler et exécuter les tests
+# Compiler les tests (sans main.c)
 test: $(BUILD_DIR)
-	$(CC) $(CFLAGS) -I$(SRC_DIR) $(TEST_DIR)/test_tri_bulles.c $(SRC_DIR)/tri_bulles.c -DTEST_MODE -o $(BUILD_DIR)/test_tri_bulles
+	$(CC) $(CFLAGS) -I$(SRC_DIR) $(TEST_DIR)/test_tri_bulles.c $(SRC_DIR)/tri_bulles.c -o $(BUILD_DIR)/test_tri_bulles
 	./$(BUILD_DIR)/test_tri_bulles
 
-# Exécuter le programme
 run: tri_bulles
 	./$(BUILD_DIR)/tri_bulles
 
-# Nettoyer les fichiers compilés
 clean:
 	rm -rf $(BUILD_DIR)
 
