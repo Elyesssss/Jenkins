@@ -12,7 +12,12 @@ pipeline {
         stage('Liste des fichiers') {
             steps {
                 echo '=== Vérification des fichiers présents ==='
-                bat 'dir'
+                bat '''
+                    dir
+                    echo.
+                    echo === Contenu du dossier src ===
+                    dir src
+                '''
             }
         }
         
@@ -29,7 +34,7 @@ pipeline {
         stage('Compilation') {
             steps {
                 echo '=== Compilation du programme ==='
-                bat 'gcc -o build/tri_bulles.exe main.c'
+                bat 'gcc -o build/tri_bulles.exe src/main.c'
             }
         }
         
