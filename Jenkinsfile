@@ -1,48 +1,64 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'gcc:latest'
+            args '-u root'
+        }
+    }
     
     stages {
         stage('Vérification environnement') {
             steps {
                 echo '=== Vérification des outils ==='
-                bat 'gcc --version'
+                sh '''
+                    gcc --version
+                    make --version
+                '''
             }
         }
         
         stage('Compilation') {
             steps {
-                echo '=== Compilation avec Makefile ==='
-                bat 'mingw32-make'
+                echo '=== Compilation du programme ==='
+                sh '''
+                    make clean
+                    make
+                '''
             }
         }
         
         stage('Tests') {
             steps {
-                echo '=== Exécution des tests ==='
-                bat 'mingw32-make test'
+                echo '=== Exécution des tests unitaires ==='
+                sh 'make test'
+            }
+        }
+        
+        stage('Exécution') {
+            steps {
+                echo '=== Exécution du programme ==='
+                sh 'make run'
             }
         }
         
         stage('Archive') {
             steps {
                 echo '=== Archivage des artefacts ==='
-                archiveArtifacts artifacts: 'build/*.exe',
-                                fingerprint: true,
-                                allowEmptyArchive: false
+                archiveArtifacts artifacts: 'build/*',
+                                fingerprint: true
             }
         }
     }
     
     post {
         success {
-            echo '✅ Pipeline Windows exécuté avec succès !'
+            echo '✅ Pipeline Windows (Docker) exécuté avec succès !'
         }
         failure {
             echo '❌ Le pipeline a échoué.'
         }
         always {
-            echo '=== Nettoyage final ==='
-            bat 'mingw32-make clean || exit 0'
+            sh 'make clean || true'
         }
     }
 }
