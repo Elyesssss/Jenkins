@@ -9,39 +9,17 @@ pipeline {
             }
         }
         
-        stage('Liste des fichiers') {
-            steps {
-                echo '=== Vérification des fichiers présents ==='
-                bat '''
-                    dir
-                    echo.
-                    echo === Contenu du dossier src ===
-                    dir src
-                '''
-            }
-        }
-        
-        stage('Nettoyage') {
-            steps {
-                echo '=== Nettoyage des anciens builds ==='
-                bat '''
-                    if exist build rmdir /s /q build
-                    mkdir build
-                '''
-            }
-        }
-        
         stage('Compilation') {
             steps {
-                echo '=== Compilation du programme ==='
-                bat 'gcc -o build/tri_bulles.exe src/main.c'
+                echo '=== Compilation avec Makefile ==='
+                bat 'mingw32-make'
             }
         }
         
         stage('Tests') {
             steps {
                 echo '=== Exécution des tests ==='
-                bat 'build\\tri_bulles.exe'
+                bat 'mingw32-make test'
             }
         }
         
@@ -64,7 +42,7 @@ pipeline {
         }
         always {
             echo '=== Nettoyage final ==='
-            bat 'if exist build rmdir /s /q build || exit 0'
+            bat 'mingw32-make clean || exit 0'
         }
     }
 }
