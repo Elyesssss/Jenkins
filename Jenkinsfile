@@ -2,18 +2,17 @@ pipeline {
     agent any
     
     stages {
-        stage('Checkout') {
-            steps {
-                echo '=== Récupération du code source ==='
-                git branch: 'windows',
-                    url: 'https://github.com/Elyesssss/Jenkins.git'
-            }
-        }
-        
         stage('Vérification environnement') {
             steps {
                 echo '=== Vérification des outils ==='
                 bat 'gcc --version'
+            }
+        }
+        
+        stage('Liste des fichiers') {
+            steps {
+                echo '=== Vérification des fichiers présents ==='
+                bat 'dir'
             }
         }
         
