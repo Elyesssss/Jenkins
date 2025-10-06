@@ -13,9 +13,9 @@ pipeline {
         stage('Vérification environnement') {
             steps {
                 echo '=== Vérification des outils ==='
-                bat '''
+                sh '''
                     gcc --version
-                    mingw32-make --version
+                    make --version
                 '''
             }
         }
@@ -23,9 +23,9 @@ pipeline {
         stage('Compilation') {
             steps {
                 echo '=== Compilation du programme ==='
-                bat '''
-                    mingw32-make clean
-                    mingw32-make
+                sh '''
+                    make clean
+                    make
                 '''
             }
         }
@@ -33,14 +33,14 @@ pipeline {
         stage('Tests') {
             steps {
                 echo '=== Exécution des tests unitaires ==='
-                bat 'mingw32-make test'
+                sh 'make test'
             }
         }
         
         stage('Exécution') {
             steps {
                 echo '=== Exécution du programme ==='
-                bat 'mingw32-make run'
+                sh 'make run'
             }
         }
         
@@ -61,7 +61,7 @@ pipeline {
             echo '❌ Le pipeline a échoué.'
         }
         always {
-            bat 'mingw32-make clean || exit 0'
+            sh 'make clean || true'
         }
     }
 }
