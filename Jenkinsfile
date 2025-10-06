@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo '=== Récupération du code source ==='
-                git branch: 'windows-pipeline',
+                git branch: 'windows',
                     url: 'https://github.com/Elyesssss/Jenkins.git'
             }
         }
