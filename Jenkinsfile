@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo '=== Récupération du code source ==='
-                git branch: 'main',
+                git branch: 'windows-pipeline',
                     url: 'https://github.com/Elyesssss/Jenkins.git'
             }
         }
@@ -13,9 +13,16 @@ pipeline {
         stage('Vérification environnement') {
             steps {
                 echo '=== Vérification des outils ==='
-                sh '''
-                    gcc --version
-                    make --version
+                bat 'gcc --version'
+            }
+        }
+        
+        stage('Nettoyage') {
+            steps {
+                echo '=== Nettoyage des anciens builds ==='
+                bat '''
+                    if exist build rmdir /s /q build
+                    mkdir build
                 '''
             }
         }
@@ -23,45 +30,37 @@ pipeline {
         stage('Compilation') {
             steps {
                 echo '=== Compilation du programme ==='
-                sh '''
-                    make clean
-                    make
-                '''
+                bat 'gcc -o build/tri_bulles.exe main.c'
             }
         }
         
         stage('Tests') {
             steps {
-                echo '=== Exécution des tests unitaires ==='
-                sh 'make test'
-            }
-        }
-        
-        stage('Exécution') {
-            steps {
-                echo '=== Exécution du programme ==='
-                sh 'make run'
+                echo '=== Exécution des tests ==='
+                bat 'build\\tri_bulles.exe'
             }
         }
         
         stage('Archive') {
             steps {
                 echo '=== Archivage des artefacts ==='
-                archiveArtifacts artifacts: 'build/*',
-                                fingerprint: true
+                archiveArtifacts artifacts: 'build/*.exe',
+                                fingerprint: true,
+                                allowEmptyArchive: false
             }
         }
     }
     
     post {
         success {
-            echo '✅ Pipeline exécuté avec succès !'
+            echo '✅ Pipeline Windows exécuté avec succès !'
         }
         failure {
             echo '❌ Le pipeline a échoué.'
         }
         always {
-            sh 'make clean || true'
+            echo '=== Nettoyage final ==='
+            bat 'if exist build rmdir /s /q build || exit 0'
         }
     }
 }
