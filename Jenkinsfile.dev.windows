@@ -1,0 +1,95 @@
+pipeline {
+    agent any
+    
+    environment {
+        PROJECT_NAME = 'tri-bulles-dev'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                echo '=== [DEV] Récupération du code source ==='
+                git branch: 'main',
+                    url: 'https://github.com/Elyesssss/Jenkins.git'
+            }
+        }
+        
+        stage('Vérification environnement') {
+            steps {
+                echo '=== [DEV] Vérification des outils ==='
+                bat '''
+                    echo Vérification de GCC...
+                    gcc --version
+                    echo.
+                    echo Vérification de Make...
+                    make --version
+                '''
+            }
+        }
+        
+        stage('Compilation') {
+            steps {
+                echo '=== [DEV] Compilation du programme ==='
+                bat '''
+                    echo Nettoyage...
+                    make clean
+                    echo.
+                    echo Compilation des programmes...
+                    make all
+                    echo.
+                    echo Vérification des binaires...
+                    dir build
+                '''
+            }
+        }
+        
+        stage('Tests unitaires') {
+            steps {
+                echo '=== [DEV] Exécution des tests unitaires ==='
+                bat '''
+                    echo Tests tri d'entiers...
+                    make test_bulles
+                    echo.
+                    echo Tests tri de chaînes...
+                    make test_chaines
+                    echo.
+                    echo ✅ Tous les tests sont passés !
+                '''
+            }
+        }
+        
+        stage('Rapport de tests') {
+            steps {
+                echo '=== [DEV] Génération du rapport ==='
+                bat '''
+                    echo === RAPPORT DE TESTS === > rapport_dev.txt
+                    echo Date: %DATE% %TIME% >> rapport_dev.txt
+                    echo Build: %BUILD_NUMBER% >> rapport_dev.txt
+                    echo. >> rapport_dev.txt
+                    echo Programmes compilés: >> rapport_dev.txt
+                    dir build >> rapport_dev.txt
+                    echo. >> rapport_dev.txt
+                    echo Tests réussis: ✅ >> rapport_dev.txt
+                    type rapport_dev.txt
+                '''
+                archiveArtifacts artifacts: 'rapport_dev.txt, build/*',
+                                fingerprint: true
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo '✅ [DEV] Pipeline exécuté avec succès !'
+            echo '📦 Les artefacts sont disponibles pour le déploiement'
+        }
+        failure {
+            echo '❌ [DEV] Le pipeline a échoué.'
+            echo '🔍 Vérifiez les logs pour identifier le problème'
+        }
+        always {
+            echo '=== [DEV] Nettoyage ==='
+            bat 'make clean || exit 0'
+        }
+    }
+}
