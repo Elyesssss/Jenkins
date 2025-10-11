@@ -9,7 +9,7 @@ int main() {
     afficher_tableau(tableau, taille);
     
     tri_bulles(tableau, taille);
-    
+    printf("TEST");
     printf("Tableau après tri : ");
     afficher_tableau(tableau, taille);
     
