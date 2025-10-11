@@ -59,7 +59,7 @@ pipeline {
                     echo "Tests tri de chaînes..."
                     make test_chaines
                     echo ""
-                    echo "✅ Tous les tests sont passés !"
+                    echo " Tous les tests sont passés !"
                 '''
             }
         }
@@ -84,7 +84,7 @@ pipeline {
                     echo "Test du programme tri d'entiers..."
                     docker run --rm ${IMAGE_NAME}:${IMAGE_TAG}
                     echo ""
-                    echo "✅ L'image Docker fonctionne correctement"
+                    echo " L'image Docker fonctionne correctement"
                 """
             }
         }
@@ -93,7 +93,7 @@ pipeline {
             steps {
                 echo '=== [OPS] DÉPLOIEMENT ==='
                 sh """
-                    echo "📦 Déploiement de l'application..."
+                    echo " Déploiement de l'application..."
                     echo ""
                     echo "Option 1: Push vers le registry Docker"
                     # docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
@@ -104,7 +104,7 @@ pipeline {
                     docker stop tri-bulles-container 2>/dev/null || true
                     docker rm tri-bulles-container 2>/dev/null || true
                     echo ""
-                    echo "✅ Image prête pour le déploiement: ${IMAGE_NAME}:${IMAGE_TAG}"
+                    echo " Image prête pour le déploiement: ${IMAGE_NAME}:${IMAGE_TAG}"
                     echo ""
                     echo "Images disponibles:"
                     docker images | grep tri-bulles || true
@@ -125,7 +125,7 @@ pipeline {
                     echo "  - Tag: ${IMAGE_TAG}" >> rapport_ops.txt
                     echo "  - Latest: ${IMAGE_NAME}:latest" >> rapport_ops.txt
                     echo "" >> rapport_ops.txt
-                    echo "Statut: ✅ DÉPLOYÉ" >> rapport_ops.txt
+                    echo "Statut:  DÉPLOYÉ" >> rapport_ops.txt
                     echo "" >> rapport_ops.txt
                     echo "Commandes utiles:" >> rapport_ops.txt
                     echo "  - Exécuter: docker run --rm ${IMAGE_NAME}:${IMAGE_TAG}" >> rapport_ops.txt
@@ -141,13 +141,13 @@ pipeline {
     
     post {
         success {
-            echo '✅ [OPS] Pipeline exécuté avec succès !'
-            echo "🚀 Application déployée: ${IMAGE_NAME}:${IMAGE_TAG}"
-            echo '📊 Consultez les rapports archivés pour plus de détails'
+            echo ' [OPS] Pipeline exécuté avec succès !'
+            echo " Application déployée: ${IMAGE_NAME}:${IMAGE_TAG}"
+            echo ' Consultez les rapports archivés pour plus de détails'
         }
         failure {
-            echo '❌ [OPS] Le pipeline a échoué.'
-            echo '🔍 Vérifiez les logs pour identifier le problème'
+            echo ' [OPS] Le pipeline a échoué.'
+            echo ' Vérifiez les logs pour identifier le problème'
         }
         always {
             echo '=== [OPS] Nettoyage ==='

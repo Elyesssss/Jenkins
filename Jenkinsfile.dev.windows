@@ -53,7 +53,7 @@ pipeline {
                     echo Tests tri de chaînes...
                     make test_chaines
                     echo.
-                    echo ✅ Tous les tests sont passés !
+                    echo  Tous les tests sont passés !
                 '''
             }
         }
@@ -69,7 +69,7 @@ pipeline {
                     echo Programmes compilés: >> rapport_dev.txt
                     dir build >> rapport_dev.txt
                     echo. >> rapport_dev.txt
-                    echo Tests réussis: ✅ >> rapport_dev.txt
+                    echo Tests réussis:  >> rapport_dev.txt
                     type rapport_dev.txt
                 '''
                 archiveArtifacts artifacts: 'rapport_dev.txt, build/*',
@@ -80,12 +80,12 @@ pipeline {
     
     post {
         success {
-            echo '✅ [DEV] Pipeline exécuté avec succès !'
-            echo '📦 Les artefacts sont disponibles pour le déploiement'
+            echo ' [DEV] Pipeline exécuté avec succès !'
+            echo ' Les artefacts sont disponibles pour le déploiement'
         }
         failure {
-            echo '❌ [DEV] Le pipeline a échoué.'
-            echo '🔍 Vérifiez les logs pour identifier le problème'
+            echo ' [DEV] Le pipeline a échoué.'
+            echo ' Vérifiez les logs pour identifier le problème'
         }
         always {
             echo '=== [DEV] Nettoyage ==='
