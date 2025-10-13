@@ -185,7 +185,6 @@ docker push localhost:5000/tri-bulles-app:latest
 | **Stages** | Jusqu'aux tests | Jusqu'au déploiement |
 | **Docker** | ❌ Non | ✅ Oui |
 | **Deploy** | ❌ Non | ✅ Oui |
-| **Durée** | ~2-3 min | ~5-7 min |
 | **Utilisation** | Développement | Production |
 
 ##  Statistiques de Tri
