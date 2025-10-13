@@ -26,7 +26,7 @@
 - Tri à bulles classique pour les entiers
 - Optimisation avec détection de tableau trié
 
-### 2️ Tri de chaînes alphanumériques ✨ NOUVEAU
+### 2️ Tri de chaînes alphanumériques 
 - **Fonction swap** : `swap_chaines(char*, char*)`
 - **Ordre ascendant** et **descendant**
 - **Compteurs** : nombre de comparaisons et d'échanges
