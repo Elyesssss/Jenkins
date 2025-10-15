@@ -84,7 +84,7 @@ void test_un_element() {
 }
 
 void test_exemple_prof() {
-    printf("Test 6: Exemple du prof (6 mots)... ");
+    printf("Test 6: Exemple du prof  ");
     char tableau[6][MAX_LONGUEUR] = {"bonjour", "hello", "world", "apple", "banana", "cherry"};
     char attendu[6][MAX_LONGUEUR] = {"apple", "banana", "bonjour", "cherry", "hello", "world"};
     StatsTri stats;
