@@ -53,7 +53,7 @@ pipeline {
                     echo Tests tri de chaînes...
                     make test_chaines
                     echo.
-                    echo  Tous les tests sont passés !
+                    echo Tous les tests sont passés !
                 '''
             }
         }
@@ -69,23 +69,37 @@ pipeline {
                     echo Programmes compilés: >> rapport_dev.txt
                     dir build >> rapport_dev.txt
                     echo. >> rapport_dev.txt
-                    echo Tests réussis:  >> rapport_dev.txt
+                    echo Tests réussis >> rapport_dev.txt
                     type rapport_dev.txt
                 '''
                 archiveArtifacts artifacts: 'rapport_dev.txt, build/*',
                                 fingerprint: true
             }
         }
+        
+        stage('Trigger OPS Pipeline') {
+            steps {
+                echo '=== [DEV] Déclenchement du pipeline OPS ==='
+                echo 'Lancement de tri-bulles-ops...'
+                build job: 'tri-bulles-ops', 
+                      wait: false,
+                      parameters: [
+                          string(name: 'TRIGGERED_BY', value: "DEV-Build-${env.BUILD_NUMBER}")
+                      ]
+            }
+        }
     }
     
     post {
         success {
-            echo ' [DEV] Pipeline exécuté avec succès !'
-            echo ' Les artefacts sont disponibles pour le déploiement'
+            echo '[DEV] Pipeline exécuté avec succès !'
+            echo 'Les artefacts sont disponibles pour le déploiement'
+            echo 'Pipeline OPS (tri-bulles-ops) a été déclenché automatiquement'
         }
         failure {
-            echo ' [DEV] Le pipeline a échoué.'
-            echo ' Vérifiez les logs pour identifier le problème'
+            echo '[DEV] Le pipeline a échoué.'
+            echo 'Vérifiez les logs pour identifier le problème'
+            echo 'Pipeline OPS non déclenché'
         }
         always {
             echo '=== [DEV] Nettoyage ==='
