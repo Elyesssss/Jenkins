@@ -1,6 +1,6 @@
-# 📊 Projet Tri à Bulles - C avec CI/CD Jenkins
+#  Projet Tri à Bulles - C avec CI/CD Jenkins
 
-## 📁 Structure du Projet
+##  Structure du Projet
 
 ```
 .
@@ -20,13 +20,13 @@
 └── Jenkinsfile.ops           # 🟢 Pipeline OPS
 ```
 
-## 🎯 Fonctionnalités
+##  Fonctionnalités
 
-### 1️⃣ Tri d'entiers (existant)
+### 1️ Tri d'entiers (existant)
 - Tri à bulles classique pour les entiers
 - Optimisation avec détection de tableau trié
 
-### 2️⃣ Tri de chaînes alphanumériques ✨ NOUVEAU
+### 2️ Tri de chaînes alphanumériques 
 - **Fonction swap** : `swap_chaines(char*, char*)`
 - **Ordre ascendant** et **descendant**
 - **Compteurs** : nombre de comparaisons et d'échanges
@@ -54,7 +54,7 @@ Nombre d'échanges      : 8
 ===========================
 ```
 
-## 🛠️ Compilation et Exécution
+##  Compilation et Exécution
 
 ### Compilation locale
 
@@ -116,7 +116,7 @@ docker run --rm tri-bulles-app ./build/tri_chaines
 docker run --rm tri-bulles-app ./run_all.sh
 ```
 
-## 🔄 Pipelines Jenkins
+##  Pipelines Jenkins
 
 ### 🔵 Pipeline DEV (`Jenkinsfile.dev`)
 
@@ -177,7 +177,7 @@ docker tag tri-bulles-app:latest localhost:5000/tri-bulles-app:latest
 docker push localhost:5000/tri-bulles-app:latest
 ```
 
-## 📊 Différences entre les Pipelines
+##  Différences entre les Pipelines
 
 | Aspect | Pipeline DEV 🔵 | Pipeline OPS 🟢 |
 |--------|----------------|----------------|
@@ -185,10 +185,9 @@ docker push localhost:5000/tri-bulles-app:latest
 | **Stages** | Jusqu'aux tests | Jusqu'au déploiement |
 | **Docker** | ❌ Non | ✅ Oui |
 | **Deploy** | ❌ Non | ✅ Oui |
-| **Durée** | ~2-3 min | ~5-7 min |
 | **Utilisation** | Développement | Production |
 
-## 📈 Statistiques de Tri
+##  Statistiques de Tri
 
 ### Exemple de sortie des statistiques
 
@@ -244,7 +243,7 @@ Type: Pipeline
 Script Path: Jenkinsfile.ops
 ```
 
-## 🎓 Points Clés du Projet
+##  Points Clés du Projet
 
 ✅ **Fonction swap** pour les chaînes de caractères  
 ✅ **Compteurs** de comparaisons et d'échanges  
@@ -254,7 +253,7 @@ Script Path: Jenkinsfile.ops
 ✅ **Intégration Docker** dans le pipeline OPS  
 ✅ **Rapports automatisés**  
 
-## 📞 Support
+##  Support
 
 Pour toute question sur :
 - Les algorithmes de tri → Voir `src/tri_*.c`
