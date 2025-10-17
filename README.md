@@ -263,6 +263,6 @@ Pour toute question sur :
 
 ---
 
-**Auteur** : Votre nom  
+**Auteur** : Elyes Hamani, Daouda Kone, Dylan Franc Ekie
 **Projet** : CI/CD avec Jenkins - Tri à Bulles  
 **Date** : Octobre 2025
