@@ -5,7 +5,7 @@
 int main() {
     // ===== TRI D'ENTIERS =====
     printf("========================================\n");
-    printf("       TEST TRI D'ENTIERs\n");
+    printf("       TEST TRI D'ENTIERS\n");
     printf("========================================\n");
     
     int tableau[] = {64, 34, 25, 12, 22, 11, 90};
