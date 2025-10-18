@@ -3,7 +3,7 @@
 
 int main() {
     printf("========================================\n");
-    printf("       PROGRAMME TRI À BULLES\n");
+    printf("       PROGRAMME TRI À BULLES \n");
     printf("========================================\n");
     
     int tableau[] = {64, 34, 25, 12, 22, 11, 90};
