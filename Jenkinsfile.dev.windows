@@ -9,7 +9,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo '=== [DEV] Récupération du code source ==='
-                git branch: 'main',
+                git branch: 'test',
                     url: 'https://github.com/Elyesssss/Jenkins.git'
             }
         }
@@ -63,10 +63,10 @@ pipeline {
                 echo '=== [DEV] Exécution des programmes ==='
                 bat '''
                     echo Exécution du tri à bulles...
-                    ./build/tri_bulles.exe
+                    build\tri_bulles.exe
                     echo.
                     echo Exécution du tri de chaînes...
-                    ./build/tri_chaines.exe
+                    build\tri_chaines.exe
                     echo.
                     echo Les deux programmes ont été exécutés avec succès !
                 '''

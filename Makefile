@@ -42,6 +42,6 @@ run: tri_bulles tri_chaines
 	./$(BUILD_DIR)/tri_chaines
 
 clean:
-	@if exist $(BUILD_DIR) rmdir /s /q $(BUILD_DIR)
+	@if exist $(BUILD_DIR) rmdir /s /q $(BUILD_DIR) 2>nul || echo Dossier build supprimé
 
 .PHONY: all test test_bulles test_chaines run clean
