@@ -38,7 +38,7 @@ pipeline {
                 echo '=== [OPS] Compilation du programme ==='
                 bat '''
                     echo Nettoyage...
-                    make clean
+                    if exist build rmdir /s /q build
                     echo.
                     echo Compilation des programmes...
                     make all
@@ -81,13 +81,10 @@ pipeline {
             steps {
                 echo '=== [OPS] Test de l\'image Docker ==='
                 bat """
-                    echo Test du programme tri à bulles...
-                    docker run --rm %IMAGE_NAME%:%IMAGE_TAG% tri_bulles
+                    echo Test du programme complet (entiers + chaînes)...
+                    docker run --rm %IMAGE_NAME%:%IMAGE_TAG%
                     echo.
-                    echo Test du programme tri de chaînes...
-                    docker run --rm %IMAGE_NAME%:%IMAGE_TAG% tri_chaines
-                    echo.
-                    echo  L'image Docker fonctionne correctement avec les deux programmes
+                    echo  L'image Docker fonctionne correctement
                 """
             }
         }
@@ -100,6 +97,8 @@ pipeline {
                     echo.
                     echo Option 1: Push vers le registry Docker
                     echo (Décommentez les lignes ci-dessous si vous avez un registry)
+                    REM docker tag %IMAGE_NAME%:%IMAGE_TAG% %DOCKER_REGISTRY%/%IMAGE_NAME%:%IMAGE_TAG%
+                    REM docker push %DOCKER_REGISTRY%/%IMAGE_NAME%:%IMAGE_TAG%
                     echo.
                     echo Option 2: Déploiement local - Arrêt conteneurs existants
                     docker stop tri-bulles-container 2>nul || echo Aucun conteneur à arrêter
@@ -107,9 +106,8 @@ pipeline {
                     echo.
                     echo  Image prête pour le déploiement: %IMAGE_NAME%:%IMAGE_TAG%
                     echo.
-                    echo Programmes disponibles dans l'image:
-                    echo   - tri_bulles: Tri à bulles d'entiers
-                    echo   - tri_chaines: Tri à bulles de chaînes
+                    echo Programme disponible dans l'image:
+                    echo   - Programme complet: Tri d'entiers + Tri de chaînes
                     echo.
                     echo Images disponibles:
                     docker images | findstr tri-bulles
@@ -133,8 +131,7 @@ pipeline {
                     echo Statut:  DÉPLOYÉ >> rapport_ops.txt
                     echo. >> rapport_ops.txt
                     echo Commandes utiles: >> rapport_ops.txt
-                    echo   - Exécuter tri à bulles: docker run --rm %IMAGE_NAME%:%IMAGE_TAG% tri_bulles >> rapport_ops.txt
-                    echo   - Exécuter tri de chaînes: docker run --rm %IMAGE_NAME%:%IMAGE_TAG% tri_chaines >> rapport_ops.txt
+                    echo   - Exécuter programme complet: docker run --rm %IMAGE_NAME%:%IMAGE_TAG% >> rapport_ops.txt
                     echo   - Inspecter: docker inspect %IMAGE_NAME%:%IMAGE_TAG% >> rapport_ops.txt
                     type rapport_ops.txt
                 """
@@ -157,7 +154,7 @@ pipeline {
         always {
             echo '=== [OPS] Nettoyage ==='
             bat '''
-                make clean || exit 0
+                if exist build rmdir /s /q build || exit 0
                 docker system prune -f
             '''
         }

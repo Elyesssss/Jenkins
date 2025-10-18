@@ -32,7 +32,7 @@ pipeline {
                 echo '=== [DEV] Compilation du programme ==='
                 bat '''
                     echo Nettoyage...
-                    make clean
+                    if exist build rmdir /s /q build
                     echo.
                     echo Compilation des programmes...
                     make all
@@ -63,10 +63,10 @@ pipeline {
                 echo '=== [DEV] Exécution des programmes ==='
                 bat '''
                     echo Exécution du tri à bulles...
-                    .\build\tri_bulles.exe
+                    build\\tri_bulles.exe
                     echo.
                     echo Exécution du tri de chaînes...
-                    .\build\tri_chaines.exe
+                    build\\tri_chaines.exe
                     echo.
                     echo Les deux programmes ont été exécutés avec succès !
                 '''
@@ -96,7 +96,7 @@ pipeline {
             steps {
                 echo '=== [DEV] Déclenchement du pipeline OPS ==='
                 echo 'Lancement de tri-bulles-ops...'
-                build job: 'tri-bulles-ops', 
+                build job: 'tri-bulles-et-chaines-ops', 
                       wait: false,
                       parameters: [
                           string(name: 'TRIGGERED_BY', value: "DEV-Build-${env.BUILD_NUMBER}")
@@ -109,7 +109,7 @@ pipeline {
         success {
             echo '[DEV] Pipeline exécuté avec succès !'
             echo 'Les artefacts sont disponibles pour le déploiement'
-            echo 'Pipeline OPS (tri-bulles-ops) a été déclenché automatiquement'
+            echo 'Pipeline OPS (tri-bulles-et-chaines-ops) a été déclenché automatiquement'
         }
         failure {
             echo '[DEV] Le pipeline a échoué.'
@@ -118,7 +118,7 @@ pipeline {
         }
         always {
             echo '=== [DEV] Nettoyage ==='
-            bat 'make clean || exit 0'
+            bat 'if exist build rmdir /s /q build || exit 0'
         }
     }
 }
