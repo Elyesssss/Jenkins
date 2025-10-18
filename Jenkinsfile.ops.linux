@@ -2,8 +2,8 @@ pipeline {
     agent any
     
     environment {
-        PROJECT_NAME = 'tri-bulles-ops'
-        IMAGE_NAME = 'tri-bulles-app'
+        PROJECT_NAME = 'tri-bulles-et-chaines-ops'
+        IMAGE_NAME = 'tri-bulles-et-chaines-app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         DOCKER_REGISTRY = 'localhost:5000'  // Modifier selon votre registry
     }
@@ -81,10 +81,13 @@ pipeline {
             steps {
                 echo '=== [OPS] Test de l\'image Docker ==='
                 sh """
-                    echo "Test du programme tri d'entiers..."
-                    docker run --rm ${IMAGE_NAME}:${IMAGE_TAG}
+                    echo "Test du programme tri à bulles..."
+                    docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} tri_bulles
                     echo ""
-                    echo " L'image Docker fonctionne correctement"
+                    echo "Test du programme tri de chaînes..."
+                    docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} tri_chaines
+                    echo ""
+                    echo " L'image Docker fonctionne correctement avec les deux programmes"
                 """
             }
         }
@@ -105,6 +108,10 @@ pipeline {
                     docker rm tri-bulles-container 2>/dev/null || true
                     echo ""
                     echo " Image prête pour le déploiement: ${IMAGE_NAME}:${IMAGE_TAG}"
+                    echo ""
+                    echo "Programmes disponibles dans l'image:"
+                    echo "  - tri_bulles: Tri à bulles d'entiers"
+                    echo "  - tri_chaines: Tri à bulles de chaînes"
                     echo ""
                     echo "Images disponibles:"
                     docker images | grep tri-bulles || true
@@ -128,7 +135,9 @@ pipeline {
                     echo "Statut:  DÉPLOYÉ" >> rapport_ops.txt
                     echo "" >> rapport_ops.txt
                     echo "Commandes utiles:" >> rapport_ops.txt
-                    echo "  - Exécuter: docker run --rm ${IMAGE_NAME}:${IMAGE_TAG}" >> rapport_ops.txt
+                    echo "  - Exécuter tri à bulles: docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} tri_bulles" >> rapport_ops.txt
+                    echo "  - Exécuter tri de chaînes: docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} tri_chaines" >> rapport_ops.txt
+                    echo "  - Exécuter les deux: docker run --rm ${IMAGE_NAME}:${IMAGE_TAG}" >> rapport_ops.txt
                     echo "  - Inspecter: docker inspect ${IMAGE_NAME}:${IMAGE_TAG}" >> rapport_ops.txt
                     echo "  - Logs: docker logs <container_id>" >> rapport_ops.txt
                     cat rapport_ops.txt

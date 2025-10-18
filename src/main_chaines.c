@@ -3,6 +3,10 @@
 #include "tri_chaines.h"
 
 int main() {
+    printf("========================================\n");
+    printf("       PROGRAMME TRI DE CHAÎNES\n");
+    printf("========================================\n");
+    
     char mots[6][MAX_LONGUEUR] = {
         "bonjour",
         "hello",
@@ -13,8 +17,6 @@ int main() {
     };
     int taille = 6;
     StatsTri stats;
-    
-    printf("=== Programme de tri de chaînes ===\n\n");
     
     // Afficher le tableau original
     printf("Tableau original : ");
@@ -41,6 +43,10 @@ int main() {
     printf("Tableau trié (descendant) : ");
     afficher_tableau_chaines(mots_desc, taille);
     afficher_statistiques(stats);
+    
+    printf("\n========================================\n");
+    printf("       TRI DE CHAÎNES TERMINÉ !\n");
+    printf("========================================\n");
     
     return 0;
 }

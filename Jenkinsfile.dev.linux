@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        PROJECT_NAME = 'tri-bulles-dev'
+        PROJECT_NAME = 'tri-bulles-et-chaines-dev'
     }
     
     stages {
@@ -54,6 +54,21 @@ pipeline {
                     make test_chaines
                     echo ""
                     echo " Tous les tests sont passés !"
+                '''
+            }
+        }
+        
+        stage('Exécution des programmes') {
+            steps {
+                echo '=== [DEV] Exécution des programmes ==='
+                sh '''
+                    echo "Exécution du tri à bulles..."
+                    ./build/tri_bulles
+                    echo ""
+                    echo "Exécution du tri de chaînes..."
+                    ./build/tri_chaines
+                    echo ""
+                    echo "Les deux programmes ont été exécutés avec succès !"
                 '''
             }
         }

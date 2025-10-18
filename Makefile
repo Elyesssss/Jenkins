@@ -4,20 +4,16 @@ SRC_DIR = src
 TEST_DIR = tests
 BUILD_DIR = build
 
-all: $(BUILD_DIR) tri_bulles tri_chaines tri_complet
+all: $(BUILD_DIR) tri_bulles tri_chaines
 
 $(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
+	@if not exist $(BUILD_DIR) mkdir $(BUILD_DIR)
 
-# Programme complet (entiers + chaînes)
-tri_complet: $(BUILD_DIR)
-	$(CC) $(CFLAGS) $(SRC_DIR)/tri_bulles.c $(SRC_DIR)/tri_chaines.c $(SRC_DIR)/main_complet.c -o $(BUILD_DIR)/tri_complet
-
-# Programme tri d'entiers uniquement
+# Programme tri d'entiers
 tri_bulles: $(BUILD_DIR)
-	$(CC) $(CFLAGS) $(SRC_DIR)/tri_bulles.c $(SRC_DIR)/main.c -o $(BUILD_DIR)/tri_bulles
+	$(CC) $(CFLAGS) $(SRC_DIR)/tri_bulles.c $(SRC_DIR)/main_bulles.c -o $(BUILD_DIR)/tri_bulles
 
-# Programme tri de chaînes uniquement
+# Programme tri de chaînes
 tri_chaines: $(BUILD_DIR)
 	$(CC) $(CFLAGS) $(SRC_DIR)/tri_chaines.c $(SRC_DIR)/main_chaines.c -o $(BUILD_DIR)/tri_chaines
 
@@ -37,11 +33,15 @@ test_chaines: $(BUILD_DIR)
 # Tous les tests
 test: test_bulles test_chaines
 
-# Exécuter le programme complet
-run: tri_complet
-	./$(BUILD_DIR)/tri_complet
+# Exécuter les deux programmes
+run: tri_bulles tri_chaines
+	@echo "=== Exécution du tri à bulles ==="
+	./$(BUILD_DIR)/tri_bulles
+	@echo ""
+	@echo "=== Exécution du tri de chaînes ==="
+	./$(BUILD_DIR)/tri_chaines
 
 clean:
-	rm -rf $(BUILD_DIR)
+	@if exist $(BUILD_DIR) rmdir /s /q $(BUILD_DIR)
 
 .PHONY: all test test_bulles test_chaines run clean
