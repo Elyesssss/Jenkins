@@ -20,7 +20,7 @@ int main() {
     afficher_tableau(tableau, taille);
     
     // ===== TRI DE CHAINES =====
-    printf("\n========================================\n");
+    printf("\n=======================================\n");
     printf("       TEST TRI DE CHAINES\n");
     printf("========================================\n");
     
