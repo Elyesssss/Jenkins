@@ -10,7 +10,7 @@ int main() {
     char mots[6][MAX_LONGUEUR] = {
         "bonjour",
         "hello",
-        "world",
+        "worldd",
         "apple",
         "banana",
         "cherry"
