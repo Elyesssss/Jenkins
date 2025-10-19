@@ -9,7 +9,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo '=== [DEV] Récupération du code source ==='
-                git branch: 'test',
+                git branch: 'main',
                     url: 'https://github.com/Elyesssss/Jenkins.git'
             }
         }
@@ -35,7 +35,7 @@ pipeline {
                     if exist build rmdir /s /q build
                     echo.
                     echo Compilation des programmes...
-                    make all
+                    make -f Makefile.windows all
                     echo.
                     echo Vérification des binaires...
                     dir build
@@ -48,10 +48,10 @@ pipeline {
                 echo '=== [DEV] Exécution des tests unitaires ==='
                 bat '''
                     echo Tests tri d'entiers...
-                    make test_bulles
+                    make -f Makefile.windows test_bulles
                     echo.
                     echo Tests tri de chaînes...
-                    make test_chaines
+                    make -f Makefile.windows test_chaines
                     echo.
                     echo Tous les tests sont passés !
                 '''
@@ -95,7 +95,7 @@ pipeline {
         stage('Trigger OPS Pipeline') {
             steps {
                 echo '=== [DEV] Déclenchement du pipeline OPS ==='
-                echo 'Lancement de tri-bulles-ops...'
+                echo 'Lancement de tri-bulles-et-chaines-ops...'
                 build job: 'tri-bulles-et-chaines-ops', 
                       wait: false,
                       parameters: [

@@ -41,7 +41,7 @@ pipeline {
                     if exist build rmdir /s /q build
                     echo.
                     echo Compilation des programmes...
-                    make all
+                    make -f Makefile.windows all
                     echo.
                     echo Vérification des binaires...
                     dir build
@@ -54,10 +54,10 @@ pipeline {
                 echo '=== [OPS] Exécution des tests unitaires ==='
                 bat '''
                     echo Tests tri d'entiers...
-                    make test_bulles
+                    make -f Makefile.windows test_bulles
                     echo.
                     echo Tests tri de chaînes...
-                    make test_chaines
+                    make -f Makefile.windows test_chaines
                     echo.
                     echo  Tous les tests sont passés !
                 '''
@@ -68,8 +68,13 @@ pipeline {
             steps {
                 echo '=== [OPS] Construction de l\'image Docker ==='
                 bat """
-                    echo Construction de l'image...
-                    docker build -t %IMAGE_NAME%:%IMAGE_TAG% .
+                    echo Nettoyage des anciennes images...
+                    docker rmi %IMAGE_NAME%:latest 2>nul || echo OK
+                    docker rmi %IMAGE_NAME%:%IMAGE_TAG% 2>nul || echo OK
+                    docker builder prune -f
+                    
+                    echo Construction SANS CACHE...
+                    docker build --no-cache -t %IMAGE_NAME%:%IMAGE_TAG% .
                     docker tag %IMAGE_NAME%:%IMAGE_TAG% %IMAGE_NAME%:latest
                     echo.
                     echo Image créée: %IMAGE_NAME%:%IMAGE_TAG%
