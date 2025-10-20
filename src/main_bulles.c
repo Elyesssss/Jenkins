@@ -3,7 +3,7 @@
 
 int main() {
     printf("========================================\n");
-    printf("       PROGRAMME TRI À BULLES \n");
+    printf("       PROGRAMME TRI A BULLES \n");
     printf("========================================\n");
     
     int tableau[] = {64, 34, 25, 12, 22, 11, 90};
@@ -14,11 +14,11 @@ int main() {
     
     tri_bulles(tableau, taille);
     
-    printf("Tableau après tri : ");
+    printf("Tableau apres tri : ");
     afficher_tableau(tableau, taille);
     
     printf("\n========================================\n");
-    printf("       TRI À BULLES TERMINÉ !\n");
+    printf("       TRI A BULLES TERMINE !\n");
     printf("========================================\n");
     
     return 0;

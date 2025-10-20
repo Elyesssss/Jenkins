@@ -4,13 +4,13 @@
 
 int main() {
     printf("========================================\n");
-    printf("       PROGRAMME TRI DE CHAÎNESs\n");
+    printf("       PROGRAMME TRI DE CHAINES\n");
     printf("========================================\n");
     
     char mots[6][MAX_LONGUEUR] = {
         "bonjour",
         "hello",
-        "worldd",
+        "world",
         "apple",
         "banana",
         "cherry"
@@ -23,29 +23,29 @@ int main() {
     afficher_tableau_chaines(mots, taille);
     
     // TRI ASCENDANT
-    printf("\n--- Tri par ordre alphabétique ASCENDANT ---\n");
+    printf("\n--- Tri par ordre alphabetique ASCENDANT ---\n");
     char mots_asc[6][MAX_LONGUEUR];
     memcpy(mots_asc, mots, sizeof(mots));
     
     tri_bulles_chaines(mots_asc, taille, 1, &stats);
     
-    printf("Tableau trié (ascendant) : ");
+    printf("Tableau trie (ascendant) : ");
     afficher_tableau_chaines(mots_asc, taille);
     afficher_statistiques(stats);
     
     // TRI DESCENDANT
-    printf("\n--- Tri par ordre alphabétique DESCENDANT ---\n");
+    printf("\n--- Tri par ordre alphabetique DESCENDANT ---\n");
     char mots_desc[6][MAX_LONGUEUR];
     memcpy(mots_desc, mots, sizeof(mots));
     
     tri_bulles_chaines(mots_desc, taille, 0, &stats);
     
-    printf("Tableau trié (descendant) : ");
+    printf("Tableau trie (descendant) : ");
     afficher_tableau_chaines(mots_desc, taille);
     afficher_statistiques(stats);
     
     printf("\n========================================\n");
-    printf("       TRI DE CHAÎNES TERMINÉ !\n");
+    printf("       TRI DE CHAINES TERMINE !\n");
     printf("========================================\n");
     
     return 0;
