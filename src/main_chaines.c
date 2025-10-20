@@ -4,7 +4,7 @@
 
 int main() {
     printf("========================================\n");
-    printf("       PROGRAMME TRI DE CHAINEssS\n");
+    printf("       PROGRAMME TRI DE CHAINEssssS\n");
     printf("========================================\n");
     
     char mots[6][MAX_LONGUEUR] = {
