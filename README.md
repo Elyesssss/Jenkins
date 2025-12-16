@@ -1,334 +1,345 @@
-# Projet Tri à Bulles et Chaînes - C avec CI/CD Jenkins
+# Projet CI/CD - Tri à Bulles avec Jenkins
 
-##  Vue d'ensemble
+## Vue d'ensemble
 
-Ce projet implémente deux algorithmes de tri à bulles distincts :
-- **Tri à bulles d'entiers** (`main_bulles.c`)
-- **Tri à bulles de chaînes de caractères** (`main_chaines.c`)
+Ce projet implémente deux algorithmes de tri à bulles en C avec une intégration CI/CD Jenkins :
+- **Tri d'entiers** avec optimisation
+- **Tri de chaînes alphabétiques** avec statistiques
 
-Chaque programme est autonome et peut être compilé/exécuté indépendamment.
-
-##  Structure du Projet
+## Structure du Projet
 
 ```
-.
-├── src/
-│   ├── main_bulles.c          # Programme principal pour tri d'entiers
-│   ├── main_chaines.c         # Programme principal pour tri de chaînes
-│   ├── tri_bulles.c           # Implémentation du tri à bulles
-│   ├── tri_bulles.h           # En-tête du tri à bulles
-│   ├── tri_chaines.c          # Implémentation du tri de chaînes
-│   └── tri_chaines.h          # En-tête du tri de chaînes
-├── tests/
-│   ├── test_tri_bulles.c      # Tests unitaires pour tri d'entiers
-│   └── test_tri_chaines.c     # Tests unitaires pour tri de chaînes
-├── build/                     # Dossier de compilation (généré)
-├── Makefile                   # Configuration de compilation
-├── Makefile.linux             # Makefile pour Docker (Linux)
-├── Dockerfile                 # Configuration Docker
-├── Jenkinsfile.dev.windows    # 🔵 Pipeline DEV (Windows)
-├── Jenkinsfile.ops.windows    # 🟢 Pipeline OPS (Windows)
-├── Jenkinsfile.dev.linux      # 🔵 Pipeline DEV (Linux)
-└── Jenkinsfile.ops.linux      # 🟢 Pipeline OPS (Linux)
+Jenkins/
+├── src/                      # Code source des algorithmes
+│   ├── tri_bulles.c/h        # Tri d'entiers
+│   ├── tri_chaines.c/h       # Tri de chaînes
+│   ├── main_bulles.c         # Programme principal entiers
+│   └── main_chaines.c        # Programme principal chaînes
+├── tests/                    # Tests unitaires (11 tests)
+│   ├── test_tri_bulles.c
+│   └── test_tri_chaines.c
+├── build/                    # Dossier de compilation (auto-généré)
+├── Makefile.windows          # Makefile pour Windows
+├── Dockerfile                # Configuration Docker
+└── Jenkinsfile.*.windows     # Pipelines Jenkins
 ```
 
-##  Fonctionnalités
+---
 
-### 1️⃣ Tri à bulles d'entiers (`main_bulles.c`)
-- Tri à bulles classique pour les entiers
-- Optimisation avec détection de tableau trié
-- Affichage avant/après tri
+## Prérequis
 
-### 2️⃣ Tri à bulles de chaînes (`main_chaines.c`)
-- **Fonction swap** : `swap_chaines(char*, char*)`
-- **Ordre ascendant** et **descendant**
-- **Compteurs** : nombre de comparaisons et d'échanges
-- **Statistiques** affichées après chaque tri
+Installez les outils suivants sur votre machine Windows :
 
-#### Exemple d'utilisation des chaînes :
-```c
-char mots[6][MAX_LONGUEUR] = {
-    "bonjour", "hello", "world", 
-    "apple", "banana", "cherry"
-};
+1. **Git for Windows**
+   - Télécharger : https://git-scm.com/download/win
+   - Inclut Git Bash
 
-StatsTri stats;
-tri_bulles_chaines(mots, 6, 1, &stats);  // 1 = ascendant, 0 = descendant
-afficher_statistiques(stats);
+2. **GCC (MinGW)**
+   - Télécharger MinGW : https://sourceforge.net/projects/mingw/
+   - OU MSYS2 : https://www.msys2.org/
+   - Ajouter `C:\MinGW\bin` au PATH Windows
+   - Vérifier : `gcc --version`
+
+3. **GNU Make**
+   - Inclus avec MinGW ou MSYS2
+   - Vérifier : `make --version`
+
+4. **Java JDK 11+** (pour Jenkins - optionnel)
+   - Télécharger : https://adoptium.net/
+   - Vérifier : `java -version`
+
+5. **Docker Desktop** (pour pipeline OPS - optionnel)
+   - Télécharger : https://www.docker.com/products/docker-desktop
+
+---
+
+## Installation
+
+### 1. Cloner le repository
+
+```bash
+# Ouvrir Git Bash ou PowerShell
+cd C:\Users\VotreNom\Documents
+git clone https://github.com/Elyesssss/Jenkins.git
+cd Jenkins
 ```
 
-**Sortie attendue (ascendant)** :
+### 2. Vérifier l'environnement
+
+```bash
+# Vérifier GCC
+gcc --version
+
+# Vérifier Make
+make --version
+
+# Vérifier la structure du projet
+ls -la
 ```
-[ "apple", "banana", "bonjour", "cherry", "hello", "world" ]
 
-=== Statistiques du tri ===
-Nombre de comparaisons : 14
-Nombre d'échanges      : 8
-===========================
-```
+---
 
-##  Compilation et Exécution
+## Compilation et Tests
 
-### Compilation locale
+### Compiler les programmes
 
 ```bash
 # Compiler tous les programmes
-make all
+make -f Makefile.windows all
 
-# Compiler uniquement le tri d'entiers
-make tri_bulles
-
-# Compiler uniquement le tri de chaînes
-make tri_chaines
-
-# Nettoyer
-make clean
+# Vérifier les binaires créés
+dir build
 ```
 
-### Tests
+Vous devriez voir :
+- `build/tri_bulles.exe`
+- `build/tri_chaines.exe`
+- `build/test_tri_bulles.exe`
+- `build/test_tri_chaines.exe`
+
+### Exécuter les tests
 
 ```bash
-# Exécuter tous les tests
-make test
+# Lancer tous les tests (11 tests)
+make -f Makefile.windows test
 
-# Tests tri d'entiers uniquement
-make test_bulles
+# Tests tri d'entiers uniquement (5 tests)
+make -f Makefile.windows test_bulles
 
-# Tests tri de chaînes uniquement
-make test_chaines
+# Tests tri de chaînes uniquement (6 tests)
+make -f Makefile.windows test_chaines
 ```
 
-### Exécution
+Résultat attendu :
+```
+=== Tests tri d'entiers ===
+Test 1: Tableau vide - OK
+Test 2: Tableau un élément - OK
+Test 3: Tableau déjà trié - OK
+Test 4: Tableau ordre inverse - OK
+Test 5: Tableau avec doublons - OK
+Tous les tests sont passés (5/5)
+
+=== Tests tri de chaînes ===
+Test 1: Tableau vide - OK
+Test 2: Tableau un élément - OK
+Test 3: Tri ascendant - OK
+Test 4: Tri descendant - OK
+Test 5: Chaînes identiques - OK
+Test 6: Statistiques correctes - OK
+Tous les tests sont passés (6/6)
+```
+
+### Exécuter les programmes
 
 ```bash
-# Exécuter les deux programmes
-make run
+# Les deux programmes
+make -f Makefile.windows run
 
-# Exécuter individuellement
+# Tri d'entiers seulement
 build\tri_bulles.exe
+
+# Tri de chaînes seulement
 build\tri_chaines.exe
 ```
 
-## 🐳 Docker
-
-### Build et exécution
+### Nettoyer les fichiers compilés
 
 ```bash
-# Construire l'image
-docker build -t tri-bulles-et-chaines-app .
-
-# Exécuter les deux programmes (défaut)
-docker run --rm tri-bulles-et-chaines-app
-
-# Exécuter seulement le tri à bulles
-docker run --rm tri-bulles-et-chaines-app tri_bulles
-
-# Exécuter seulement le tri de chaînes
-docker run --rm tri-bulles-et-chaines-app tri_chaines
+make -f Makefile.windows clean
 ```
-
-##  Pipelines Jenkins
-
-### 🔵 Pipeline DEV (`tri-bulles-et-chaines-dev`)
-
-**Objectif** : Développement et validation jusqu'aux tests
-
-**Stages** :
-1. ✅ **Checkout** - Récupération du code (branche `test`)
-2. ✅ **Vérification environnement** - GCC, Make
-3. ✅ **Compilation** - Build des deux programmes
-4. ✅ **Tests unitaires** - Exécution de tous les tests
-5. ✅ **Exécution des programmes** - Validation fonctionnelle
-6. ✅ **Rapport de tests** - Archivage des artefacts
-7. 🔄 **Trigger OPS Pipeline** - Déclenchement automatique du pipeline OPS
-
-**Configuration Jenkins** :
-- **Nom** : `tri-bulles-et-chaines-dev`
-- **Type** : Pipeline
-- **Script Path** : `Jenkinsfile.dev.windows`
-- **Branche** : `test`
-
-**Artefacts générés** :
-- `rapport_dev.txt`
-- Binaires dans `build/`
 
 ---
 
-### 🟢 Pipeline OPS (`tri-bulles-et-chaines-ops`)
+## Configuration Jenkins (Optionnel)
 
-**Objectif** : Déploiement complet avec Docker
+Si vous souhaitez tester les pipelines Jenkins avec déclenchement automatique, suivez ces étapes.
 
-**Stages** :
-1. ✅ **Checkout** - Récupération du code (branche `test`)
-2. ✅ **Vérification environnement** - GCC, Make, Docker
-3. ✅ **Compilation** - Build des deux programmes
-4. ✅ **Tests unitaires** - Validation complète
-5. 🐳 **Build Docker Image** - Construction de l'image `tri-bulles-et-chaines-app`
-6. 🐳 **Test Docker Image** - Test des deux programmes dans Docker
-7. 🚀 **DEPLOY** - Déploiement
-8. ✅ **Rapport de déploiement** - Documentation
+### 1. Installer Jenkins
 
-**Configuration Jenkins** :
-- **Nom** : `tri-bulles-et-chaines-ops`
-- **Type** : Pipeline
-- **Script Path** : `Jenkinsfile.ops.windows`
-- **Branche** : `test`
+1. Télécharger Jenkins LTS : https://www.jenkins.io/download/
+2. Exécuter l'installeur `.msi`
+3. Ouvrir `http://localhost:8080`
+4. Récupérer le mot de passe initial :
+   ```
+   C:\Program Files\Jenkins\secrets\initialAdminPassword
+   ```
+5. Choisir "Install suggested plugins"
+6. Créer un compte administrateur
 
-**Artefacts générés** :
-- `rapport_ops.txt`
-- Image Docker : `tri-bulles-et-chaines-app:${BUILD_NUMBER}`
-- Image Docker : `tri-bulles-et-chaines-app:latest`
+### 2. Configurer ngrok (pour déclenchement automatique)
 
-**Commandes de déploiement** :
+Ngrok permet d'exposer Jenkins sur Internet pour recevoir les webhooks GitHub.
+
+1. Créer un compte gratuit sur https://ngrok.com/
+2. Télécharger `ngrok.exe` et l'extraire dans `C:\ngrok\`
+3. Récupérer votre authtoken sur https://dashboard.ngrok.com/
+4. Configurer le token :
+   ```bash
+   cd C:\ngrok
+   .\ngrok config add-authtoken VOTRE_TOKEN_ICI
+   ```
+5. Démarrer le tunnel (laisser ce terminal ouvert) :
+   ```bash
+   ngrok http 8080
+   ```
+6. Noter l'URL publique affichée : `https://abc123xyz.ngrok-free.app`
+
+### 3. Configurer le webhook GitHub
+
+1. Aller sur votre fork GitHub → **Settings** → **Webhooks** → **Add webhook**
+2. Remplir :
+   - **Payload URL** : `https://abc123xyz.ngrok-free.app/github-webhook/` (ne pas oublier le `/` final)
+   - **Content type** : `application/json`
+   - **Events** : Just the push event
+3. **Add webhook**
+4. Vérifier le tick vert (connexion OK)
+
+### 4. Créer le pipeline DEV
+
+1. Dashboard Jenkins → **New Item**
+2. Nom : `tri-bulles-et-chaines-dev`
+3. Type : **Pipeline**
+4. Configuration :
+   - **Build Triggers** : Cocher **GitHub hook trigger for GITScm polling**
+   - **Pipeline** → Definition : **Pipeline script from SCM**
+   - SCM : **Git**
+   - Repository URL : `https://github.com/Elyesssss/Jenkins.git`
+   - Branch : `*/main`
+   - Script Path : `Jenkinsfile.dev.windows`
+5. **Save**
+
+### 5. Créer le pipeline OPS
+
+1. Dashboard Jenkins → **New Item**
+2. Nom : `tri-bulles-et-chaines-ops`
+3. Type : **Pipeline**
+4. Configuration :
+   - **Pipeline** → Definition : **Pipeline script from SCM**
+   - SCM : **Git**
+   - Repository URL : `https://github.com/Elyesssss/Jenkins.git`
+   - Branch : `*/main`
+   - Script Path : `Jenkinsfile.ops.windows`
+5. **Save**
+
+### 6. Tester le workflow automatique
+
+Le pipeline DEV déclenche automatiquement le pipeline OPS en cas de succès.
+
+**Faire un commit pour tester** :
 ```bash
-# Exécuter les deux programmes
+echo "// Test" >> src/tri_bulles.c
+git add .
+git commit -m "Test workflow CI/CD"
+git push origin main
+```
+
+**Résultat attendu** :
+1. GitHub envoie un webhook à Jenkins (via ngrok)
+2. Le pipeline **DEV** se lance automatiquement
+3. Si DEV réussit → Le pipeline **OPS** se lance automatiquement
+4. Les deux pipelines s'affichent dans le dashboard Jenkins
+
+### 7. Lancer manuellement (pour démo sans commit)
+
+Si les profs veulent voir le pipeline sans faire de commit :
+
+1. Dashboard Jenkins → Sélectionner `tri-bulles-et-chaines-dev`
+2. Cliquer sur **Build Now**
+3. Observer l'exécution dans **Console Output**
+
+**Stages du pipeline DEV** :
+- Checkout → Vérification → Compilation → Tests (11 tests) → Exécution → Rapport → **Trigger OPS**
+
+**Stages du pipeline OPS** (lance automatiquement après DEV) :
+- Checkout → Vérification → Compilation → Tests → Build Docker → Test Docker → Déploiement
+
+**Vérifier l'image Docker créée** :
+```bash
+docker images | findstr tri-bulles
+docker run --rm tri-bulles-et-chaines-app:latest
+```
+
+---
+
+## Docker (Optionnel)
+
+### Construire l'image manuellement
+
+```bash
+docker build -t tri-bulles-et-chaines-app .
+```
+
+### Exécuter l'image
+
+```bash
+# Les deux programmes (défaut)
 docker run --rm tri-bulles-et-chaines-app:latest
 
-# Exécuter seulement le tri à bulles
-docker run --rm tri-bulles-et-chaines-app:latest tri_bulles
+# Tri d'entiers seulement
+docker run --rm tri-bulles-et-chaines-app:latest ./build/tri_bulles
 
-# Exécuter seulement le tri de chaînes
-docker run --rm tri-bulles-et-chaines-app:latest tri_chaines
+# Tri de chaînes seulement
+docker run --rm tri-bulles-et-chaines-app:latest ./build/tri_chaines
 ```
-
-## 🔄 Workflow CI/CD
-
-```mermaid
-graph LR
-    A[Commit sur branche test] --> B[Pipeline DEV]
-    B --> C{Tests OK?}
-    C -->|Oui| D[Pipeline OPS]
-    C -->|Non| E[Échec]
-    D --> F[Build Docker]
-    F --> G[Test Docker]
-    G --> H[Déploiement]
-    H --> I[Succès]
-```
-
-##  Différences entre les Pipelines
-
-| Aspect | Pipeline DEV 🔵 | Pipeline OPS 🟢 |
-|--------|----------------|----------------|
-| **Objectif** | Validation code | Déploiement complet |
-| **Stages** | Jusqu'aux tests + exécution | Jusqu'au déploiement |
-| **Docker** | ❌ Non | ✅ Oui |
-| **Deploy** | ❌ Non | ✅ Oui |
-| **Trigger** | Webhook GitHub | Automatique après DEV |
-| **Utilisation** | Développement | Production |
-
-## 📈 Exemple de sortie complète
-
-### Tri à bulles d'entiers :
-```
-========================================
-       PROGRAMME TRI À BULLES
-========================================
-Tableau avant tri : [ 64 34 25 12 22 11 90 ]
-Tableau après tri : [ 11 12 22 25 34 64 90 ]
-========================================
-       TRI À BULLES TERMINÉ !
-========================================
-```
-
-### Tri de chaînes :
-```
-========================================
-       PROGRAMME TRI DE CHAÎNES
-========================================
-Tableau original : [ "bonjour", "hello", "world", "apple", "banana", "cherry" ]
-
---- Tri par ordre alphabétique ASCENDANT ---
-Tableau trié (ascendant) : [ "apple", "banana", "bonjour", "cherry", "hello", "world" ]
-
-=== Statistiques du tri ===
-Nombre de comparaisons : 14
-Nombre d'échanges      : 8
-===========================
-
---- Tri par ordre alphabétique DESCENDANT ---
-Tableau trié (descendant) : [ "world", "hello", "cherry", "bonjour", "banana", "apple" ]
-
-=== Statistiques du tri ===
-Nombre de comparaisons : 14
-Nombre d'échanges      : 7
-===========================
-
-========================================
-       TRI DE CHAÎNES TERMINÉ !
-========================================
-```
-
-##  Configuration Jenkins
-
-### Prérequis sur Jenkins
-
-```bash
-# Installer les plugins nécessaires
-- Git plugin
-- Pipeline plugin
-- Docker Pipeline plugin (pour OPS)
-- GitHub Integration plugin
-
-# S'assurer que Jenkins a accès à :
-- gcc
-- make
-- docker (pour pipeline OPS)
-```
-
-### Configuration des Webhooks GitHub
-
-1. **Repository Settings** → **Webhooks** → **Add webhook**
-2. **Payload URL** : `https://votre-ngrok-url.ngrok.io/github-webhook/`
-3. **Content type** : `application/json`
-4. **Events** : `Just the push event`
-5. **Branches** : `test`
-
-### Créer les jobs Jenkins
-
-```bash
-# Job 1: DEV
-Nom: tri-bulles-et-chaines-dev
-Type: Pipeline
-Script Path: Jenkinsfile.dev.windows
-Branche: test
-
-# Job 2: OPS
-Nom: tri-bulles-et-chaines-ops
-Type: Pipeline
-Script Path: Jenkinsfile.ops.windows
-Branche: test
-```
-
-##  Points Clés du Projet
-
-✅ **Deux programmes séparés** (`main_bulles.c` et `main_chaines.c`)  
-✅ **Fonction swap** pour les chaînes de caractères  
-✅ **Compteurs** de comparaisons et d'échanges  
-✅ **Tri ascendant et descendant**  
-✅ **Tests unitaires complets**  
-✅ **2 Pipelines Jenkins distincts** (DEV et OPS)  
-✅ **Intégration Docker** avec exécution individuelle  
-✅ **Rapports automatisés**  
-✅ **Workflow CI/CD complet** avec déclenchement automatique  
-✅ **Support multi-plateforme** (Windows/Linux)  
-
-##  Support
-
-Pour toute question sur :
-- **Les algorithmes de tri** → Voir `src/tri_*.c`
-- **Les programmes principaux** → Voir `src/main_*.c`
-- **Les tests** → Voir `tests/test_*.c`
-- **Les pipelines** → Voir `Jenkinsfile.*.windows`
-- **Docker** → Voir `Dockerfile`
-
-##  Changelog
-
-- **v2.0** : Refactorisation en deux programmes séparés
-- **v1.0** : Implémentation initiale avec programme unique
 
 ---
 
-**Auteur** : Elyes Hamani, Daouda Kone, Dylan Franc Ekie  
-**Projet** : CI/CD avec Jenkins - Tri à Bulles et Chaînes  
-**Date** : Octobre 2025  
-**Branche** : `test`
+## Dépannage
+
+### Erreur : `gcc: command not found`
+
+**Solution** :
+1. Vérifier l'installation : `gcc --version`
+2. Ajouter MinGW au PATH :
+   - Système → Paramètres avancés → Variables d'environnement
+   - Ajouter `C:\MinGW\bin` au PATH
+3. Redémarrer le terminal
+
+### Erreur : `make: command not found`
+
+**Solution** :
+- Make est inclus avec MinGW
+- Vérifier le PATH comme ci-dessus
+
+### Erreur de compilation dans Jenkins
+
+**Solution** :
+1. Dashboard Jenkins → Manage Jenkins → Global Tool Configuration
+2. Section **Git** : Path to Git executable : `C:\Program Files\Git\bin\git.exe`
+3. Redémarrer Jenkins après modification du PATH système
+
+### Docker build échoue
+
+**Solution** :
+1. Démarrer Docker Desktop
+2. Vérifier : `docker ps`
+3. Nettoyer l'espace disque : `docker system prune -a -f`
+
+### Tests échouent
+
+**Solution** :
+1. Exécuter les tests localement : `make -f Makefile.windows test`
+2. Vérifier les logs pour identifier le test en échec
+3. Déboguer manuellement :
+   ```bash
+   gcc -I src tests/test_tri_bulles.c src/tri_bulles.c -o test.exe
+   .\test.exe
+   ```
+
+---
+
+## Auteurs
+
+- **Elyes Hamani**
+- **Daouda Kone**
+- **Dylan Franc Ekie**
+
+**Repository** : https://github.com/Elyesssss/Jenkins.git
+**Date** : Octobre 2025
+
+---
+
+## Licence
+
+Projet étudiant à but pédagogique.
