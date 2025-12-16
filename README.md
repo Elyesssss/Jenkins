@@ -1,6 +1,6 @@
 # Projet Tri à Bulles et Chaînes - C avec CI/CD Jenkins
 
-## 🎯 Vue d'ensemble
+##  Vue d'ensemble
 
 Ce projet implémente deux algorithmes de tri à bulles distincts :
 - **Tri à bulles d'entiers** (`main_bulles.c`)
@@ -8,7 +8,7 @@ Ce projet implémente deux algorithmes de tri à bulles distincts :
 
 Chaque programme est autonome et peut être compilé/exécuté indépendamment.
 
-## 📁 Structure du Projet
+##  Structure du Projet
 
 ```
 .
@@ -32,7 +32,7 @@ Chaque programme est autonome et peut être compilé/exécuté indépendamment.
 └── Jenkinsfile.ops.linux      # 🟢 Pipeline OPS (Linux)
 ```
 
-## 🚀 Fonctionnalités
+##  Fonctionnalités
 
 ### 1️⃣ Tri à bulles d'entiers (`main_bulles.c`)
 - Tri à bulles classique pour les entiers
@@ -67,7 +67,7 @@ Nombre d'échanges      : 8
 ===========================
 ```
 
-## 🔨 Compilation et Exécution
+##  Compilation et Exécution
 
 ### Compilation locale
 
@@ -127,7 +127,7 @@ docker run --rm tri-bulles-et-chaines-app tri_bulles
 docker run --rm tri-bulles-et-chaines-app tri_chaines
 ```
 
-## 🔄 Pipelines Jenkins
+##  Pipelines Jenkins
 
 ### 🔵 Pipeline DEV (`tri-bulles-et-chaines-dev`)
 
@@ -205,7 +205,7 @@ graph LR
     H --> I[Succès]
 ```
 
-## 📊 Différences entre les Pipelines
+##  Différences entre les Pipelines
 
 | Aspect | Pipeline DEV 🔵 | Pipeline OPS 🟢 |
 |--------|----------------|----------------|
@@ -258,7 +258,7 @@ Nombre d'échanges      : 7
 ========================================
 ```
 
-## 🔧 Configuration Jenkins
+##  Configuration Jenkins
 
 ### Prérequis sur Jenkins
 
@@ -299,7 +299,7 @@ Script Path: Jenkinsfile.ops.windows
 Branche: test
 ```
 
-## 🎯 Points Clés du Projet
+##  Points Clés du Projet
 
 ✅ **Deux programmes séparés** (`main_bulles.c` et `main_chaines.c`)  
 ✅ **Fonction swap** pour les chaînes de caractères  
@@ -312,7 +312,7 @@ Branche: test
 ✅ **Workflow CI/CD complet** avec déclenchement automatique  
 ✅ **Support multi-plateforme** (Windows/Linux)  
 
-## 🛠️ Support
+##  Support
 
 Pour toute question sur :
 - **Les algorithmes de tri** → Voir `src/tri_*.c`
@@ -321,7 +321,7 @@ Pour toute question sur :
 - **Les pipelines** → Voir `Jenkinsfile.*.windows`
 - **Docker** → Voir `Dockerfile`
 
-## 📝 Changelog
+##  Changelog
 
 - **v2.0** : Refactorisation en deux programmes séparés
 - **v1.0** : Implémentation initiale avec programme unique
